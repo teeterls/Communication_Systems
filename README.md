@@ -15,10 +15,7 @@ The structure is the following:
 8. OFDM with frequency shit (error in frequency included)
 
 # Radio telecommunications and radiolocation systems development
-In this folder, the detailed development in Matlab of some of the most important radio telecommunications and radiolocation systems nowadays can be found. The structure is the following:
-1. 
-2.
-3.
-4.
-5.
-6.
+In this folder, the detailed development in Matlab and explanation (in Spanish) of some of the most important radio telecommunications and radiolocation systems nowadays can be found. The structure is the following:
+1. 4x4 Multiple Input-Multiple Output Technology (MIMO): capacity estimation
+2. Communications satellite orbit projection
+3. GNSS: terminal position in XYZ and geodetic coordinates
