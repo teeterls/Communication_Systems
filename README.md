@@ -12,6 +12,7 @@ The structure is the following:
 5. Digital modulations (mQAM, QPSK, DQPSK, APSK)
 6. Orthogonal Frequency-Division Multiplexing (OFDM)
 7. OFDM with Cyclic Prefix
+8. OFDM with frequency shit (error in frequency included)
 
 # Radio telecommunications and radiolocation systems development
 In this folder, the detailed development in Matlab of some of the most important radio telecommunications and radiolocation systems nowadays can be found. The structure is the following:
