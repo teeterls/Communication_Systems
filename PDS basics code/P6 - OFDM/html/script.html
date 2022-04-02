@@ -1,0 +1,457 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>MULTIPLEXACION POR DIVISION EN FRECUENCIAS ORTOGONALES (OFDM)</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-11-03"><meta name="DC.source" content="script.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>MULTIPLEXACION POR DIVISION EN FRECUENCIAS ORTOGONALES (OFDM)</h1><!--introduction--><p>Maria Jos&eacute; Medina y Teresa Gonz&aacute;lez</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Ejercicio 3</a></li><li><a href="#2">Definici&oacute;n del sistema</a></li><li><a href="#5">Modulaci&oacute;n OFDM</a></li><li><a href="#11">Canal</a></li><li><a href="#15">RX</a></li><li><a href="#21">Curvas de BER</a></li><li><a href="#24">Representaci&oacute;n espectral</a></li></ul></div><h2 id="1">Ejercicio 3</h2><h2 id="2">Definici&oacute;n del sistema</h2><pre class="codeinput">clear; close <span class="string">all</span>, format <span class="string">compact</span>
+</pre><p>En esta pr&aacute;ctica se implementa un sistema OFDM con 10 subportadoras separadas 200Hz y 128 puntos de NFFT.  Se modula y demodula en QPSK (4 niveles). Se simula el canal como uno real con awgn.</p><pre class="codeinput">NFFT  =	128;  <span class="comment">% Tama&ntilde;o de la FFT</span>
+df    =  200;  <span class="comment">% Separaci&oacute;n entre portadoras</span>
+Fs    =	NFFT*df;  <span class="comment">% Frecuencia de muestreo</span>
+Nf    =	10;  <span class="comment">% Numero de portadoras con datos</span>
+m_ary =	4;  <span class="comment">% Indicador de modulacion digital de cada portadora</span>
+<span class="comment">%</span>
+SNR =0:1:20;  <span class="comment">% Vector de relaciones SNR en el canal</span>
+</pre><p>Generaci&oacute;n de los bits a transmitir. Han de ser un multiplo entero de log2(m_ary)*Nf. Se elige un n&uacute;mero de s&iacute;mbolos de OFDM de 10000 y se crea un vector de bits aleatorio de tama&ntilde;o el n&uacute;mero de bits/s&iacute;mbolo (4 niveles*10 portadoras)*10000 s&iacute;mbolos.</p><pre class="codeinput">Nofdm  =  10000;  <span class="comment">% N&uacute;mero de s&iacute;mbolos OFDM</span>
+
+txbits = round(rand([1,log2(m_ary)*Nofdm*Nf]));
+
+<span class="comment">% Generaci&oacute;n de s&iacute;mbolos complejos resultantes de la modulaci&oacute;n en QPSK. Se recomienda, aunque no es estrictamente necesario, que los s&iacute;mbolos se agrupen en una matriz de Nf filas y Nofdm columnas</span>
+
+mod = moduladorQPSK(txbits);
+mod = reshape(mod, [Nf, Nofdm]);
+</pre><h2 id="5">Modulaci&oacute;n OFDM</h2><p>La modulaci&oacute;n OFDM se implementa realizando la transformada inversa de Fourier de una matriz X, que se obtiene de los s&iacute;mbolos complejos a la salida del modulador QPSK, tal como se describe en la teor&iacute;a. A X se le denomina matriz de coeficientes espectrales, y su dimensi&oacute;n es NFFT filas por Nofdm columnas</p><pre>Creaci&oacute;n de la matriz X, de componentes espectrales, para la IFFT</pre><pre>Incializaci&oacute;n a cero</pre><pre class="codeinput">   X = zeros(NFFT, Nofdm);
+<span class="comment">%</span>
+<span class="comment">%  Asignaci&oacute;n de los s&iacute;mbolos moduladores al espectro positivo</span>
+   X(29:38,:) = mod;
+<span class="comment">%</span>
+<span class="comment">%  Asignaci&oacute;n de los s&iacute;mbolos moduladores en orden inverso y conjugados al espectro negativo. Describa lo que realiza la funci&oacute;n flipud.</span>
+</pre><p>La funci&oacute;n flipud (flip array up to down) se utiliza para invertir el orden del vector X. Con esto se calculan los conjugados de las posiciones 29:38, y se asignan a las posiciones N-1-K correspondientes para construir el vector de coeficientes FFT de 128 puntos.</p><pre class="codeinput">   X(NFFT/2+2:NFFT,:) = flipud(conj(X(2:NFFT/2,:)));
+
+<span class="comment">% Generaci&oacute;n del vector de muestras temporales reales x como resultado de la modulaci&oacute;n OFDM. L&eacute;ase la documentaci&oacute;n de las funciones IFFT y FFT de MATLAB</span>
+<span class="comment">%</span>
+<span class="comment">% Se&ntilde;al transmitida, que tiene que ser real.</span>
+</pre><p>Las funcion ifft de Matlab no multiplica por el n&uacute;mero de muestras como se deber&iacute;a hacer de forma te&oacute;rica, por lo que se a&ntilde;ade manualmente.</p><pre class="codeinput">x = ifft(X, NFFT, <span class="string">'symmetric'</span>)*NFFT;
+
+<span class="comment">% % En esta pr&aacute;ctica no se a&ntilde;ade prefijo c&iacute;clico</span>
+<span class="comment">%</span>
+<span class="comment">% % Transformaci&oacute;n de x en un vector fila</span>
+<span class="comment">%</span>
+x = reshape(x,  [], 1);
+<span class="comment">%</span>
+<span class="comment">% % Representaci&oacute;n de gr&aacute;ficas temporales</span>
+<span class="comment">% %</span>
+<span class="comment">%</span>
+<span class="comment">% Represente dos gr&aacute;ficas temporales. En la primera se debe representar la se&ntilde;al x durante un intervalo de tiempo correspondiente a varios s&iacute;mbolos OFDM, a elegir por el alumno. En la segunda represente la variaci&oacute;n de la potencia en funci&oacute;n del tiempo, superponiendo sobre la gr&aacute;fica las rectas de potencia media y potencia de pico en ese intervalo de tiempo. Calcule el PAPR en dB e indique su valor en el t&iacute;tulo de la gr&aacute;fica.</span>
+
+figure;
+<span class="comment">% C&aacute;lculo Ts y Tsimb seg&uacute;n la teor&iacute;a.</span>
+Ts=1/Fs;
+Tsimb=NFFT*Ts;
+<span class="comment">% Vector temporal correspondientes al periodo de 10 s&iacute;mbolos.</span>
+t=0:Ts:10*Tsimb-Ts;
+plot(t,x(1:10*NFFT))
+xlabel(<span class="string">'t(ms)'</span>);
+ylabel(<span class="string">'x ifft'</span>);
+title(<span class="string">'Representacion temporal se&ntilde;al transmitida'</span>);
+</pre><img vspace="5" hspace="5" src="script_01.png" alt=""> <p>En esta gr&aacute;fica se representa la se&ntilde;al a transmitir en el dominio del tiempo (10Ts&iacute;mbolo). Las amplitudes corresponden a los valores de la ifft de los coeficientes NFFT de los s&iacute;mbolos QPSK generados anteriormente.</p><pre class="codeinput"><span class="comment">% representaci&oacute;n de la variaci&oacute;n temporal de la potencia, superponiendo las rectas que indican la potencia media y la de pico.</span>
+<span class="comment">% potencia elemento a alemento</span>
+P= x.^2;
+Pmedio=mean(P(1:10*NFFT));
+Ppico=max(P(1:10*NFFT));
+papr_dB =10*log10(Ppico/Pmedio);
+</pre><p>En esta gr&aacute;fica se representa la variaci&oacute;n temporal de la potencia de la se&ntilde;al transmitida. Adem&aacute;s, se superponen las rectas correspondientes a la potencia media y la potencia de pico.</p><pre class="codeinput">figure
+plot(t,P(1:10*NFFT));
+hold <span class="string">on</span>;
+yline(Ppico, <span class="string">'g--'</span>);
+yline(Pmedio, <span class="string">'r--'</span>);
+xlabel(<span class="string">'t(ms)'</span>);
+legend(<span class="string">'Potencia de se&ntilde;al en l&iacute;nea'</span>, <span class="string">'Potencia media'</span>, <span class="string">'Potencia de pico'</span>);
+title([<span class="string">'Se&ntilde;al OFDM para 10 simbolos OFDM,    PAPR = '</span> num2str(round(papr_dB,1)), <span class="string">' (dB)'</span>]);
+</pre><img vspace="5" hspace="5" src="script_02.png" alt=""> <img vspace="5" hspace="5" src="script_03.png" alt=""> <p>Se calcula el PAPR(db) como la relacion entre la P maxima de la se&ntilde;al (pico) y la Pmedia. Se puede observar este valor es muy pr&oacute;ximo a k (10 portadoras). La mayor desventaja de OFDM es que el valor de PAPR es aproximadamente el n&uacute;mero de portadoras, y para conseguir velocidades muy altas se necesitan un n&uacute;mero elevado. Se requiere una linealidad de A*K en los amplificadores utilizados, lo que es muy complicado de conseguir en la pr&aacute;ctica. Sin embargo, como los picos son de muy corta duraci&oacute;n, se pueden utilizar t&eacute;cnicas de correcci&oacute;n.</p><h2 id="11">Canal</h2><pre class="codeinput"> BER = [];
+ <span class="comment">% C&aacute;lculo del factor de ancho de banda.</span>
+ fb = 10*log10( (NFFT/2)/Nf );
+</pre><p>El factor de ancho de banda (fb) es la relaci&oacute;n entre el BW disponible (parte + del espectro) y el BW que ocupan las portadoras, es decir, cuanto BW del total se utiliza para enviar la informaci&oacute;n.</p><pre class="codeinput"><span class="comment">% Se abre bucle de SNR:</span>
+<span class="comment">% Se a&ntilde;ade ruido awgn para conseguir el SNR deseado sobre la banda de Nf subportadoras</span>
+<span class="keyword">for</span> SNR_k = SNR
+</pre><pre class="codeinput">    y  = awgn(x,SNR_k-fb,<span class="string">'measured'</span>);
+</pre><img vspace="5" hspace="5" src="script_04.png" alt=""> <p>La funcion awgn de Matlab genera ruido con densidad espectral uniforme, aplicando el mismo SNR al BW completo de la se&ntilde;al de entrada (x). La potencia de la se&ntilde;al de entrada se localiza en el ancho de banda ocupado por las portadoras, que son las frecuencias a las que se transmite la informaci&oacute;n (siendo el resto de amplitudes=0). Por esto, se resta el fb al SNR (db), que equivale a dividir la potencia de la se&ntilde;al de entrada entre la parte de BW total que se utiliza para transmitir la informaci&oacute;n.La SNR resultante es menor, ya que solo tenemos en cuenta una parte del BW total.</p><h2 id="15">RX</h2><p>En el receptor se realiza una demodulaci&oacute;n OFDM para obtener los simbolos recibidos. La demodulaci&oacute;n es el proceso inverso a la modulaci&oacute;n, b&aacute;sicamente se realizar&aacute; una FFT de la se&ntilde;al recibida.</p><pre class="codeinput"><span class="comment">% Transformaci&oacute;n del vector y en una matriz de NFFT filas y Nofdm columnas</span>
+
+y = reshape(y,  [NFFT, Nofdm]);
+
+<span class="comment">% Implementaci&oacute;n de la FFT para demodular la se&ntilde;al OFDM.</span>
+</pre><p>De nuevo la funci&oacute;n fft de Matlab no modifica la amplitud a partir del n&uacute;mero de puntos de NFFT, por lo que se hace manualmente para que coincida con la f&oacute;rmula te&oacute;rica.</p><pre class="codeinput">Y = fft(y,NFFT)/NFFT;
+
+<span class="comment">%Demodulaci&oacute;n DQPSK</span>
+ demod=reshape(Y(29:38,:), 1, []);
+rxbits= demoduladorQPSK(demod);
+</pre><p>Tras obtener el vector con los coeficientes FFT, se demodula  en QPSK la parte del vector correspondiente a la informaci&oacute;n transmitida (posiciones de las 10 portadoras)</p><p>Para calcular la BER, se calcula el n&uacute;mero de bits err&oacute;neos (suma de la diferencia entre bit recibido y el transmitido) y se dividen entre el n&uacute;mero de bits totales.</p><pre class="codeinput">BER= [BER sum(abs(txbits-rxbits))/length(txbits)]; <span class="comment">% C&aacute;lculo de BER</span>
+
+<span class="comment">% Se cierra bucle de SNR</span>
+</pre><pre class="codeinput"> <span class="keyword">end</span>
+</pre><h2 id="21">Curvas de BER</h2><pre>Para el c&aacute;lculo de BER vs SNR en QPSK</pre><pre class="codeinput">   gamma  = 10.^((SNR-3)/10);
+   BERTeo = qfunc(sqrt(2*gamma));
+   BERTeo(find(BERTeo&lt;1e-5)) = NaN;
+</pre><p>Se calcula la BER te&oacute;rica y se desprecia aquellos valores &lt; $10^{-15}</p><pre class="codeinput">   <span class="comment">% Representacion BER vs BER teorica</span>
+   figure
+   semilogy(SNR, BER,     <span class="string">'-+'</span>);   hold <span class="string">on</span>;
+   semilogy(SNR, BERTeo, <span class="string">'-rO'</span>);
+   legend(<span class="string">'Simulado'</span>,<span class="string">'Te&oacute;rico'</span>)
+   xlabel(<span class="string">'SNR (dB)'</span>);  ylabel(<span class="string">'BER'</span>)
+   grid <span class="string">on</span>
+   title(<span class="string">'Resultados del sistema OFDM'</span>)
+   xlim([0 15])
+</pre><img vspace="5" hspace="5" src="script_05.png" alt=""> <p>Como se puede observar en la gr&aacute;fica, la BER coincide con la BER te&oacute;rica desde valores de SNR peque&ntilde;os (de 0 a 10db), siendo entre 10 y 12 db una diferencia m&iacute;nima (orden de 2*10^-4). Esta simulacion de OFDM es un caso ideal, en el que no se contempla propagaci&oacute;n multitrayecto, en la que OFDM es muy robusta ante distorsiones de la se&ntilde;al mediante la t&eacute;cnica de prefijo c&iacute;clico. En el caso de propagaci&oacute;n multitrayecto, si se comparase la BER con otros tipos de modulaci&oacute;n, la BER menor corresponder&iacute;a a OFDM.</p><h2 id="24">Representaci&oacute;n espectral</h2><pre class="codeinput">    <span class="comment">%Para una relaci&oacute;n se&ntilde;al ruido de 15 dB en la banda donde hay se&ntilde;al, represente el espectro real de la se&ntilde;al en l&iacute;nea, en dB, &uacute;nicamente frecuencias positivas, lo que se ver&iacute;a en un analizador de espectros. El eje de frecuencias debe estar marcado en KHz.</span>
+    <span class="comment">% A&ntilde;adimos awgn con SNR=15.</span>
+    y  = awgn(x,15-fb,<span class="string">'measured'</span>);
+</pre><pre>FFT de la se&ntilde;al con ruido. Obtenemos espectro de amplitudes, ajustando la amplitud a la f&oacute;rmula te&oacute;rica. Utilizamos Nofdm=10000 s&iacute;mbolos OFDM, que son los que queremos representar. El vector Y por tanto tiene longitud =NFFT*Nofdm.</pre><pre class="codeinput">    Y = fft(y,NFFT*Nofdm)/NFFT;
+</pre><p>El intervalo temporal de an&aacute;lisis NFFT*Ts*Nofdm = Nofdm/df El rango de frecuencias de an&aacute;lisis = df/Nofdm. Hay m&aacute;s resoluci&oacute;n a mayor n&uacute;mero de s&iacute;mbolos. Las portadoras est&aacute;n muy juntas (multiplexaci&oacute;n en frecuencia).</p><pre class="codeinput">   <span class="comment">% Vector de frecuencias a representar (parte + del espectro, nos quedamos con NFFT/2), con Nofdm=10000 y paso df (distancia entre portadoras).</span>
+      frec=(1:1:Nofdm*NFFT/2)*df/Nofdm;
+</pre><p>Nos quedamos con la parte positiva del espectro total de la FFT (vector Y), ya que sabemos que en el espectro - se encuentran los conjugados de los coeficientes FFT de la parte +(de 0 a NFFT/2). Vector de amplitudes de la se&ntilde;al FFT en db.</p><pre class="codeinput">   XdB = 20*log10(abs(Y(1:Nofdm*NFFT/2)));
+
+   <span class="comment">% Limitaci&oacute;n del margen din&aacute;mico</span>
+   XdB(find(XdB&lt;max(XdB)-30)) = max(XdB)-30;
+
+   <span class="comment">%Representacion en frecuencia (Khz)</span>
+     figure;
+   plot(frec/10^3, abs(XdB));
+
+
+   title(<span class="string">'Espectro positivo de la se&ntilde;al transmitida FFT con ruido awgn, SNR=15db'</span>);
+   xlabel(<span class="string">'f(KHz)'</span>);
+   ylabel(<span class="string">'Amplitud(dB)'</span>);
+   xlim([0,13]);
+</pre><img vspace="5" hspace="5" src="script_06.png" alt=""> <p>Como se puede observar en la gr&aacute;fica, pese al ruido (SNR=15), se aprecia claramente el rango de frecuencias donde se encuentra la informaci&oacute;n (mayor amplitud,&gt;50 db). Este rango de frecuencias corresponde al BW ocupado por las portadoras para transmitir los Nofdm s&iacute;mbolos totales. Se observa c&oacute;mo este rango de frecuencias va de 5.8 Khz (29*200hz, k=1) a 7.6 Khz (38*200Hz, k=10), coinciciendo as&iacute; con el BW te&oacute;rico. Tambi&eacute;n se puede apreciar los l&oacute;bulos laterales de las portadoras a los extremos (espectro sinc en QPSK).</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% MULTIPLEXACION POR DIVISION EN FRECUENCIAS ORTOGONALES (OFDM)
+%
+% Maria José Medina y Teresa González 
+%% Ejercicio 3
+%% Definición del sistema
+
+clear; close all, format compact
+%%
+% En esta práctica se implementa un sistema OFDM con 10 subportadoras
+% separadas 200Hz y 128 puntos de NFFT.  Se modula y demodula en QPSK (4
+% niveles). Se simula el canal como uno real con awgn. 
+
+NFFT  =	128;  % Tamaño de la FFT
+df    =  200;  % Separación entre portadoras
+Fs    =	NFFT*df;  % Frecuencia de muestreo
+Nf    =	10;  % Numero de portadoras con datos
+m_ary =	4;  % Indicador de modulacion digital de cada portadora
+%
+SNR =0:1:20;  % Vector de relaciones SNR en el canal
+ 
+%%
+% Generación de los bits a transmitir. Han de ser un multiplo entero de
+% log2(m_ary)*Nf. 
+% Se elige un número de símbolos de OFDM de 10000 y se
+% crea un vector de bits aleatorio de tamaño el número de bits/símbolo (4
+% niveles*10 portadoras)*10000 símbolos.
+
+Nofdm  =  10000;  % Número de símbolos OFDM
+
+txbits = round(rand([1,log2(m_ary)*Nofdm*Nf]));
+ 
+% Generación de símbolos complejos resultantes de la modulación en QPSK. Se recomienda, aunque no es estrictamente necesario, que los símbolos se agrupen en una matriz de Nf filas y Nofdm columnas
+
+mod = moduladorQPSK(txbits);
+mod = reshape(mod, [Nf, Nofdm]);
+ 
+%% Modulación OFDM
+% 
+% La modulación OFDM se implementa realizando la transformada inversa de Fourier de una matriz X, que se obtiene de los símbolos complejos a la salida del modulador QPSK, tal como se describe en la teoría. A X se le denomina matriz de coeficientes espectrales, y su dimensión es NFFT filas por Nofdm columnas
+%
+%  Creación de la matriz X, de componentes espectrales, para la IFFT
+%
+%  Incialización a cero 
+   X = zeros(NFFT, Nofdm);
+%
+%  Asignación de los símbolos moduladores al espectro positivo
+   X(29:38,:) = mod;
+%
+%  Asignación de los símbolos moduladores en orden inverso y conjugados al espectro negativo. Describa lo que realiza la función flipud.
+%%
+% La función flipud (flip array up to down) se utiliza para invertir el orden del vector X. Con esto se calculan los conjugados de las posiciones 29:38, y se asignan a las posiciones N-1-K correspondientes para construir el vector de coeficientes FFT de 128 puntos. 
+   X(NFFT/2+2:NFFT,:) = flipud(conj(X(2:NFFT/2,:)));
+
+% Generación del vector de muestras temporales reales x como resultado de la modulación OFDM. Léase la documentación de las funciones IFFT y FFT de MATLAB
+%   
+% Señal transmitida, que tiene que ser real. 
+%% 
+% Las funcion ifft de Matlab no multiplica por el número de muestras como se debería hacer de forma teórica, por
+% lo que se añade manualmente.
+x = ifft(X, NFFT, 'symmetric')*NFFT;
+
+% % En esta práctica no se añade prefijo cíclico
+% 
+% % Transformación de x en un vector fila
+% 
+x = reshape(x,  [], 1);
+% 
+% % Representación de gráficas temporales
+% %
+% 
+% Represente dos gráficas temporales. En la primera se debe representar la señal x durante un intervalo de tiempo correspondiente a varios símbolos OFDM, a elegir por el alumno. En la segunda represente la variación de la potencia en función del tiempo, superponiendo sobre la gráfica las rectas de potencia media y potencia de pico en ese intervalo de tiempo. Calcule el PAPR en dB e indique su valor en el título de la gráfica.
+
+figure;
+% Cálculo Ts y Tsimb según la teoría.
+Ts=1/Fs;
+Tsimb=NFFT*Ts;
+% Vector temporal correspondientes al periodo de 10 símbolos. 
+t=0:Ts:10*Tsimb-Ts;
+plot(t,x(1:10*NFFT))
+xlabel('t(ms)');  
+ylabel('x ifft');
+title('Representacion temporal señal transmitida');
+
+%%
+% 
+% En esta gráfica se representa la señal a transmitir en el dominio del
+% tiempo (10Tsímbolo). Las amplitudes corresponden a los valores de la
+% ifft de los coeficientes NFFT de los símbolos QPSK generados
+% anteriormente.
+% 
+
+% representación de la variación temporal de la potencia, superponiendo las rectas que indican la potencia media y la de pico. 
+% potencia elemento a alemento
+P= x.^2;
+Pmedio=mean(P(1:10*NFFT));
+Ppico=max(P(1:10*NFFT));
+papr_dB =10*log10(Ppico/Pmedio);
+%%
+%
+% En esta gráfica se representa la variación temporal de la potencia de la
+% señal transmitida. Además, se superponen las rectas correspondientes a la
+% potencia media y la potencia de pico.
+figure
+plot(t,P(1:10*NFFT));
+hold on;
+yline(Ppico, 'gREPLACE_WITH_DASH_DASH');
+yline(Pmedio, 'rREPLACE_WITH_DASH_DASH');
+xlabel('t(ms)');  
+legend('Potencia de señal en línea', 'Potencia media', 'Potencia de pico');  
+title(['Señal OFDM para 10 simbolos OFDM,    PAPR = ' num2str(round(papr_dB,1)), ' (dB)']);
+%%
+% 
+% Se calcula el PAPR(db) como la relacion entre la P maxima de la señal
+% (pico) y la Pmedia. Se puede observar este valor es muy próximo a k (10
+% portadoras). La mayor desventaja de OFDM es que el valor de PAPR es
+% aproximadamente el número de portadoras, y para conseguir velocidades muy
+% altas se necesitan un número elevado. Se requiere una linealidad de A*K
+% en los amplificadores utilizados, lo que es muy complicado de conseguir
+% en la práctica. Sin embargo, como los picos son de muy corta duración, se
+% pueden utilizar técnicas de corrección. 
+
+
+
+%% Canal
+ 
+
+ BER = [];
+ % Cálculo del factor de ancho de banda.
+ fb = 10*log10( (NFFT/2)/Nf );
+
+ %%
+ %
+ % El factor de ancho de banda (fb) es la relación entre el BW disponible (parte + del espectro) y el BW que ocupan las portadoras, es decir, cuanto BW del total se utiliza para enviar la información.
+
+% Se abre bucle de SNR:
+% Se añade ruido awgn para conseguir el SNR deseado sobre la banda de Nf subportadoras 
+for SNR_k = SNR
+    y  = awgn(x,SNR_k-fb,'measured');  
+%%
+% La funcion awgn de Matlab genera ruido con densidad espectral uniforme,
+% aplicando el mismo SNR al BW completo de la señal de entrada (x). La
+% potencia de la señal de entrada se localiza en el ancho de banda ocupado por las portadoras, que son
+% las frecuencias a las que se transmite la información (siendo el resto de
+% amplitudes=0). Por esto, se resta el fb al SNR (db), que equivale a
+% dividir la potencia de la señal de entrada entre la parte de BW total que
+% se utiliza para transmitir la información.La SNR resultante es menor, ya
+% que solo tenemos en cuenta una parte del BW total.
+
+%%  RX
+ 
+%%
+% En el receptor se realiza una demodulación OFDM para obtener los simbolos recibidos. La demodulación es el proceso inverso a la modulación, básicamente se realizará una FFT de la señal recibida.
+
+% Transformación del vector y en una matriz de NFFT filas y Nofdm columnas
+
+y = reshape(y,  [NFFT, Nofdm]);
+
+% Implementación de la FFT para demodular la señal OFDM.
+%%
+%
+% De nuevo la función fft de Matlab no modifica la amplitud a partir del
+% número de puntos de NFFT, por lo que se hace manualmente para que
+% coincida con la fórmula teórica.
+Y = fft(y,NFFT)/NFFT; 
+
+%Demodulación DQPSK
+ demod=reshape(Y(29:38,:), 1, []);
+rxbits= demoduladorQPSK(demod);
+%%
+% Tras obtener el vector con los coeficientes FFT, se demodula  en QPSK la parte del
+% vector correspondiente a la información transmitida (posiciones de las 10
+% portadoras)
+%%
+% Para calcular la BER, se calcula el número de bits erróneos (suma de la diferencia entre bit
+% recibido y el transmitido) y se dividen entre el número de bits totales.
+BER= [BER sum(abs(txbits-rxbits))/length(txbits)]; % Cálculo de BER
+
+% Se cierra bucle de SNR
+ end
+%% Curvas de BER
+%
+%  Para el cálculo de BER vs SNR en QPSK 
+%
+   gamma  = 10.^((SNR-3)/10);
+   BERTeo = qfunc(sqrt(2*gamma));
+   BERTeo(find(BERTeo<1e-5)) = NaN;  
+   
+   %% 
+   % Se calcula la BER teórica y se desprecia aquellos valores < $10^{-15}
+   
+   % Representacion BER vs BER teorica
+   figure
+   semilogy(SNR, BER,     '-+');   hold on;
+   semilogy(SNR, BERTeo, '-rO');
+   legend('Simulado','Teórico')
+   xlabel('SNR (dB)');  ylabel('BER')
+   grid on
+   title('Resultados del sistema OFDM')
+   xlim([0 15])
+   
+   %%
+   % Como se puede observar en la gráfica, la BER coincide con la BER
+   % teórica desde valores de SNR pequeños (de 0 a 10db), siendo entre 10 y
+   % 12 db una diferencia mínima (orden de 2*10^-4).
+   % Esta simulacion de OFDM es un caso ideal, en el que no se contempla
+   % propagación multitrayecto, en la que OFDM es muy robusta ante
+   % distorsiones de la señal mediante la técnica de prefijo cíclico.
+   % En el caso de propagación multitrayecto, si se comparase la BER con otros
+   % tipos de modulación, la BER menor correspondería a OFDM.
+
+%% Representación espectral
+
+    %Para una relación señal ruido de 15 dB en la banda donde hay señal, represente el espectro real de la señal en línea, en dB, únicamente frecuencias positivas, lo que se vería en un analizador de espectros. El eje de frecuencias debe estar marcado en KHz.
+    % Añadimos awgn con SNR=15.
+    y  = awgn(x,15-fb,'measured'); 
+    
+    %%
+    %  FFT de la señal con ruido. Obtenemos espectro de amplitudes, ajustando la amplitud a la fórmula teórica. Utilizamos Nofdm=10000 símbolos OFDM, que son los que queremos representar. El vector Y por tanto tiene longitud =NFFT*Nofdm.
+    Y = fft(y,NFFT*Nofdm)/NFFT; 
+    
+    %%
+    % El intervalo temporal de análisis NFFT*Ts*Nofdm = Nofdm/df
+    % El rango de frecuencias de análisis = df/Nofdm. Hay más resolución a
+    % mayor número de símbolos. Las portadoras están muy juntas
+    % (multiplexación en frecuencia).
+ 
+   % Vector de frecuencias a representar (parte + del espectro, nos quedamos con NFFT/2), con Nofdm=10000 y paso df (distancia entre portadoras).  
+      frec=(1:1:Nofdm*NFFT/2)*df/Nofdm;
+            
+   
+    %%
+   % Nos quedamos con la parte positiva del espectro total de la FFT (vector Y), ya
+   % que sabemos que en el espectro - se encuentran los conjugados de los coeficientes
+   % FFT de la parte +(de 0 a NFFT/2).
+   % Vector de amplitudes de la señal FFT en db.
+   XdB = 20*log10(abs(Y(1:Nofdm*NFFT/2)));
+   
+   % Limitación del margen dinámico
+   XdB(find(XdB<max(XdB)-30)) = max(XdB)-30; 
+   
+   %Representacion en frecuencia (Khz)
+     figure;
+   plot(frec/10^3, abs(XdB));
+
+
+   title('Espectro positivo de la señal transmitida FFT con ruido awgn, SNR=15db');
+   xlabel('f(KHz)');  
+   ylabel('Amplitud(dB)');
+   xlim([0,13]);
+   
+   %% 
+   % Como se puede observar en la gráfica, pese al ruido (SNR=15), se aprecia
+   % claramente el rango de frecuencias donde se encuentra la información
+   % (mayor amplitud,>50 db). Este rango de frecuencias corresponde al BW
+   % ocupado por las portadoras para transmitir los Nofdm símbolos totales. 
+   % Se observa cómo este rango de frecuencias va de 5.8 Khz
+   % (29*200hz, k=1) a 7.6 Khz (38*200Hz, k=10), coinciciendo así con el BW
+   % teórico. 
+   % También se puede apreciar los lóbulos laterales de las portadoras a los extremos (espectro sinc
+   % en QPSK).
+
+   
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,12 @@
+FM PRIMERO SATURA, incluso aumentando el ref level 10 dbm
+RBW 3KHZ. ancho de banda resolucion.-
+atenuacion 40db
+
+
+span 3 mhz
+
+rango 97.5 a 100.5 Mhz
+
+TDT
+ref level 10 dbm, att 40 db
+utiliza mod OFDM, por eso las portadoras estab muy juntas formando montañitas

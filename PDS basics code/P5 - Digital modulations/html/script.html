@@ -1,0 +1,739 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Practica 3 - Modulaciones digitales</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-10-24"><meta name="DC.source" content="script.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Practica 3 - Modulaciones digitales</h1><!--introduction--><p>Maria Jos&eacute; Medina y Teresa Gonz&aacute;lez</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">2. MODULACI&Oacute;N DIGITAL POR DESPLAZAMIENTO DE FASE</a></li><li><a href="#2">Ejercicio 2.1: Modulacion QPSK</a></li><li><a href="#4">EXTRA: REPRESENTACI&Oacute;N DQPSK</a></li><li><a href="#6">Ejercicio 2.2: Modulacion QPSK con ruido</a></li><li><a href="#8">Ejercicio 2.3: Cadena de modulaci&oacute;n-demodulaci&oacute;n QPSK-DQPSK</a></li><li><a href="#10">Ejercicio 2.4: Curvas de BER frente a EbNo para QPSK y DQPSK</a></li><li><a href="#12">Ejercicio 2.5: Influencia de la rotaci&oacute;n de la fase o error de fase en recepci&oacute;n</a></li><li><a href="#18">3. MODULACION DIGITAL EN n-QAM y APSK</a></li><li><a href="#19">Ejercio 3.1: Curvas de BER frente a EbNo para QAM y APSK</a></li><li><a href="#23">EXTRA: Comparacion 16APSK Y 16QAM.</a></li></ul></div><h2 id="1">2. MODULACI&Oacute;N DIGITAL POR DESPLAZAMIENTO DE FASE</h2><h2 id="2">Ejercicio 2.1: Modulacion QPSK</h2><p>En este apartado se modula una se&ntilde;al de entrada sin ruido en QPSK. Para ello, se utiliza la funci&oacute;n dada moduladorQPSK (4 niveles). En esta funci&oacute;n se cogen los elementos de un vector par de 2 en 2 y se calculan los componentes fase (I) y cuadratura (Q) tomando el primer y segundo elemento de cada par respectivamente.</p><pre class="codeinput"><span class="comment">% Vector de entrada con longitud par (8).</span>
+x = [ 1 1 1 0 0 1 0 0];
+
+<span class="comment">% Salida modulador</span>
+y_qpsk = moduladorQPSK(x);
+
+<span class="comment">% Representacion puntos constelaci&oacute;n</span>
+scatterplot(y_qpsk);
+title(<span class="string">'Constelaci&oacute;n QPSK'</span>)
+</pre><img vspace="5" hspace="5" src="script_01.png" alt=""> <p>Como se puede observar en la representaci&oacute;n, ya que no hay presencia de ruido, los puntos de la salida coinciden exactamente con los de la constelaci&oacute;n QPSK.</p><h2 id="4">EXTRA: REPRESENTACI&Oacute;N DQPSK</h2><p>DQPSK consiste en modular cada elemento de forma relativa con respecto al anterior (tiene memoria). La fase se calcula haciendo como la suma de la fase del s&iacute;mbolo anterior m&aacute;s la fase del s&iacute;mbolo actual. A continuaci&oacute;n, se representa la constelaci&oacute;n DQPSK para compararla con la de QPSK a partir de una se&ntilde;al de entrada aleatoria binaria.</p><pre class="codeinput">N=10000;
+x=randi([0,1],1,N);
+y_dqpsk=moduladorDQPSK(x);
+scatterplot(y_dqpsk)
+title(<span class="string">'Constelaci&oacute;n DQPSK'</span>)
+</pre><img vspace="5" hspace="5" src="script_02.png" alt=""> <p>Como se puede observar, en vez de 4 puntos hay 8, ya que calcula la suma de un punto con el resto para todas las combinaciones de coordenadas existentes en QPSK.</p><h2 id="6">Ejercicio 2.2: Modulacion QPSK con ruido</h2><p>En este apartado se genera una se&ntilde;al binaria aleatoria de longitud N=10000. A esta se le a&ntilde;ade ruido awgn, con distintas SNRs (5,10,15 db). Se modula en QPSK como el apartado anterior.</p><pre class="codeinput">N=10000;
+snr_db = [5, 10, 15];
+
+<span class="comment">% se&ntilde;al</span>
+x=randi([0,1],1,N);
+
+<span class="comment">% salida modulacion</span>
+y_qpsk=moduladorQPSK(x);
+
+<span class="comment">% Bucle SNRs para generar se&ntilde;al awgn y representarla en scatterplot.</span>
+<span class="keyword">for</span> k=snr_db
+y_noise=awgn(y_qpsk, k, <span class="string">'measured'</span>);
+scatterplot(y_noise);
+title([<span class="string">'Constelacion QPSK con SNRdb='</span> num2str(k)])
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="script_03.png" alt=""> <img vspace="5" hspace="5" src="script_04.png" alt=""> <img vspace="5" hspace="5" src="script_05.png" alt=""> <p>Como se puede observar en los distintos scatterplot, a mayor SNR m&aacute;s concentrados est&aacute;n los puntos resultantes, por lo que la BER resultante ser&aacute; menor. Al contrario, con SNR inferiores, los puntos est&aacute;n m&aacute;s dispersos, lo que supone un mayor error de detecci&oacute;n. Idealmente, la distancia entre puntos es de 2 unidades y el umbral de decisi&oacute;n se encuentra en cero tanto para fase como para cuadratura. En este caso, con el SNR mayor (15 db)la nube de puntos formada en torno a los valores sin ruido tiene un radio de 0.5 aproximadamente. Al ser este radio menor que la distancia al umbral de decisi&oacute;n (1 unidad), el error no es significativo. Con SNR=10 db, el radio de la nube de puntos es 1 aproximadamente, por lo que se encuentra muy pr&oacute;ximo al umbral de decisi&oacute;n, causando mayor confusi&oacute;n. Por &uacute;ltimo, con la SNR menor (5db), el radio es 1.3 aproximadamente, un 30% mayor que la distancia al umbral de decisi&oacute;n. Por ello las nubes de puntos se solapan y al calcular la distancia m&iacute;nima no se garantiza una detecci&oacute;n correcta.</p><h2 id="8">Ejercicio 2.3: Cadena de modulaci&oacute;n-demodulaci&oacute;n QPSK-DQPSK</h2><p>En este apartado se modula y se demodula la se&ntilde;al aleatoria del apartado anterior, tanto en QPSK como en DQPSK.</p><pre class="codeinput"><span class="comment">% QPSK</span>
+x_demod=demoduladorQPSK(y_qpsk);
+dif_qpsk=max(abs(x_demod-x));
+disp(<span class="string">"BER QPSK ="</span>+dif_qpsk)
+
+<span class="comment">% DQPSK</span>
+y_dqpsk=moduladorDQPSK(x);
+x_demod=demoduladorDQPSK(y_dqpsk);
+dif_dqpsk=max(abs(x_demod-x));
+disp(<span class="string">"BER DQPSK ="</span>+dif_dqpsk)
+</pre><pre class="codeoutput">BER QPSK =0
+BER DQPSK =0
+</pre><p>Como se puede observar, en ausencia de ruido, la se&ntilde;al de entrada y salida de la cadena son id&eacute;nticas, por lo que BER=0 (la diferencia entre ambas bit a bit es 0) en ambos tipos de modulaci&oacute;n.</p><h2 id="10">Ejercicio 2.4: Curvas de BER frente a EbNo para QPSK y DQPSK</h2><p>En este apartado se realiza una comparativa de las BERs te&oacute;ricas y reales (en presencia de ruido awgn) frente a valores de EbNo tanto para QPSK como DQPSK. Para ello se utiliza un vector EbNo de -5 a 20dB.</p><pre class="codeinput">EbNo_dB = -5:2:20;
+EbNo = 10.^(EbNo_dB/10);
+k = log2(4); <span class="comment">%Numero de bits por simbolo</span>
+SNR_dB = EbNo_dB + 10*log10(k);
+
+<span class="comment">% QPSK</span>
+<span class="comment">% F&oacute;rmulas qpsk teorica</span>
+BER_teor_QPSK = qfunc(sqrt(2*EbNo));
+BER_teor_QPSK(BER_teor_QPSK&lt;1e-5)=NaN;
+
+<span class="comment">% salida modulacion</span>
+y_qpsk=moduladorQPSK(x);
+
+<span class="comment">% bucle para calcular la BER real para cada valor de EbNo (db).</span>
+<span class="keyword">for</span> k=1:length(EbNo_dB)
+    <span class="comment">% se&ntilde;al con ruido awgn.</span>
+    y_noise=awgn(y_qpsk, SNR_dB(k), <span class="string">'measured'</span>);
+    <span class="comment">% se&ntilde;al demodulada</span>
+    x_demod=demoduladorQPSK(y_noise);
+    <span class="comment">% diferencia entre se&ntilde;al demodulada con ruido y la de entrada. El total</span>
+    <span class="comment">% de diferencias es el error.</span>
+    diferencia=abs(x_demod-x);
+    <span class="comment">% BER= total error/longitud.</span>
+    BER_real_QPSK(k)= sum(diferencia)/N;
+<span class="keyword">end</span>
+
+
+<span class="comment">% DQPSK</span>
+<span class="comment">% F&oacute;rmulas BER te&oacute;rica.</span>
+BER_teor_DQPSK=1.13*qfunc(sqrt(1.2*EbNo));
+BER_teor_DQPSK(BER_teor_DQPSK&lt;1e-5)=NaN;
+
+<span class="comment">%se&ntilde;al modulada</span>
+y_dqpsk=moduladorDQPSK(x);
+
+
+<span class="keyword">for</span> k=1:length(EbNo_dB)
+    y_noise=awgn(y_dqpsk, SNR_dB(k), <span class="string">'measured'</span>);
+    x_demod=demoduladorDQPSK(y_noise);
+    diferencia=abs(x_demod-x);
+    BER_real_DQPSK(k)= sum(diferencia)/N;
+<span class="keyword">end</span>
+
+figure
+semilogy(EbNo_dB,BER_teor_QPSK, <span class="string">'-ob'</span>)
+hold <span class="string">on</span>;
+semilogy(EbNo_dB, BER_real_QPSK, <span class="string">'--r'</span>)
+title(<span class="string">'Comparaci&oacute;n BERs'</span>)
+xlabel(<span class="string">'EbNo(db)'</span>)
+ylabel(<span class="string">'BER'</span>)
+hold <span class="string">on</span>;
+semilogy(EbNo_dB,BER_teor_DQPSK, <span class="string">'-og'</span>)
+hold <span class="string">on</span>;
+semilogy(EbNo_dB, BER_real_DQPSK, <span class="string">'--m'</span>)
+legend(<span class="string">'BER QPSK teorica'</span>, <span class="string">'BER QPSK real'</span>, <span class="string">'BER dQPSK teorica'</span>, <span class="string">'BER DQPSK real'</span>)
+grid <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="script_06.png" alt=""> <p>Como se puede extraer de la comparativa, tanto las BERs te&oacute;rica como la real se ajustan con mucha precisi&oacute;n en ambos tipos de modulaci&oacute;n. Por otro lado, cuanto mayor es el EbNo, mayor es SNR, por lo que la BER cae a valores despreciables (menor que <img src="script_eq11285194417576436925.png" alt="$10^{-5}$" style="width:47px;height:23px;">). Por ejemplo, para un BER=$10^{-5}$, en el caso de QPSK se necesitan 9db de EnBo, mientras que en DQPSK se necesitan 11db, una diferencia de 2db. Esto significa que en DQPSK tanto la BER te&oacute;rica como la real son mayores que en QPSK. El motivo es que, al tratarse de un sistema con memoria, el error se acumula de un s&iacute;mbolo al siguiente, y se puede ver tanto en la gr&aacute;fica como de forma anal&iacute;tica el efecto que tiene sobre todo para SNRs relativamente altas, donde la diferencia respecto a QPSK es mayor.</p><h2 id="12">Ejercicio 2.5: Influencia de la rotaci&oacute;n de la fase o error de fase en recepci&oacute;n</h2><p>En este apartado adem&aacute;s de ruido awgn se a&ntilde;ade a la se&ntilde;al modulada una rotacion fase entre 10 y 30&ordm; tanto para QPSK como DQPSK.</p><pre class="codeinput"><span class="comment">% QPSK</span>
+<span class="comment">% bucle para a&ntilde;adir rotacion con exponente complejo.</span>
+<span class="keyword">for</span> n=10:10:30
+ scatterplot(y_qpsk*exp(n*1i*pi/180));
+ title([<span class="string">'Se&ntilde;al con rotacion de fase = '</span> num2str(n) <span class="string">'&ordm;'</span>])
+ grid <span class="string">on</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Como se puede observar, debido a la rotaci&oacute;n de fase la distancia al</span>
+<span class="comment">% umbral de decisi&oacute;n queda significativamente reducida. En el caso de</span>
+<span class="comment">% rotaci&oacute;n de 10&ordm;, la distancia m&iacute;nima para de 1 a 0.8 aproximadamente.</span>
+<span class="comment">% Para 20&ordm;, 0.6 y para 10&ordm;, 0.4. Esto causa que se necesite un apotencia de</span>
+<span class="comment">% ruido mucho menor generar el s&iacute;mbolo err&oacute;neo, por lo que la BER aumenta</span>
+<span class="comment">% considerablemente.</span>
+</pre><img vspace="5" hspace="5" src="script_07.png" alt=""> <img vspace="5" hspace="5" src="script_08.png" alt=""> <img vspace="5" hspace="5" src="script_09.png" alt=""> <p>Se representa la se&ntilde;al modulada en QPSK rotada 10-20-30&ordm;.</p><pre class="codeinput"><span class="comment">% figura BER te&oacute;rica QPSK</span>
+figure
+semilogy(EbNo_dB,BER_teor_QPSK, <span class="string">'b'</span>)
+ hold <span class="string">on</span>;
+
+<span class="comment">% bucle para a&ntilde;adir ruido y rotaci&oacute;n de fase a la se&ntilde;al modulada.</span>
+<span class="keyword">for</span> n=10:10:30
+    <span class="keyword">for</span> k=1:length(EbNo_dB)
+    y_noise=awgn(y_qpsk*exp(n*1i*pi/180), SNR_dB(k), <span class="string">'measured'</span>);
+    x_demod=demoduladorQPSK(y_noise);
+    <span class="comment">% demodulacion.</span>
+    diferencia=abs(x_demod-x);
+    <span class="comment">% calculo BER real.</span>
+    BER_real_QPSK(k)= sum(diferencia)/N;
+    <span class="keyword">end</span>
+        <span class="comment">% representacion BER real</span>
+        semilogy(EbNo_dB, BER_real_QPSK)
+        hold <span class="string">on</span>;
+
+<span class="keyword">end</span>
+        title(<span class="string">'Comparaci&oacute;n BERs con rotaci&oacute;n de fase'</span>)
+        xlabel(<span class="string">'EbNo(db)'</span>)
+        ylabel(<span class="string">'BER'</span>)
+        legend(<span class="string">'BER QPSK teorica'</span>, <span class="string">'BER QPSK real rotada 10&ordm;'</span>, <span class="string">'BER QPSK real rotada 20&ordm;'</span>, <span class="string">'BER QPSK real rotada 30&ordm;'</span>)
+        grid <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="script_10.png" alt=""> <p>Como se puede observar, a mayor rotaci&oacute;n de fase, mayor es la diferencia entre la BER te&oacute;rica y la real. A mayor &aacute;ngulo, m&aacute;s suave es la pendiente de la BER respecto a EbNo. El motivo es que al introducir diferencia de fase, se rota los puntos de la constelaci&oacute;n pero no los l&iacute;mites de decisi&oacute;n (ejes), por lo que en presencia de ruido es m&aacute;s probable que los puntos caigan en cuadrantes err&oacute;neos. Cuantitativamente, para conseguir una BER de <img src="script_eq00957679905736456308.png" alt="$10^{-3}$" style="width:47px;height:23px;">, se necesitan las siguientes EbNo: 0&ordm; -&gt; 7db 10&ordm; -&gt; 8db 20&ordm; -&gt; 11db 30&ordm; -&gt; 15db Es decir, a mayor rotaci&oacute;n de fase, mayor es la SNR necesaria para conseguir el mismo nivel de BER.</p><pre class="codeinput"><span class="comment">% DQPSK</span>
+
+<span class="keyword">for</span> n=10:10:30
+ scatterplot(y_qpsk*exp(n*1i*pi/180));
+ title(<span class="string">'Se&ntilde;al con rotacion de fase'</span>);
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="script_11.png" alt=""> <img vspace="5" hspace="5" src="script_12.png" alt=""> <img vspace="5" hspace="5" src="script_13.png" alt=""> <p>Se representan las se&ntilde;ales rotadas.</p><pre class="codeinput"><span class="comment">% BER teorica</span>
+figure
+semilogy(EbNo_dB,BER_teor_DQPSK, <span class="string">'g'</span>)
+hold <span class="string">on</span>;
+
+<span class="comment">% bucle calcular ruido + rotacion de fase</span>
+<span class="keyword">for</span> n=10:10:30
+   <span class="keyword">for</span> k=1:length(EbNo_dB)
+    y_noise=awgn(y_dqpsk*exp(n*1i*pi/180), SNR_dB(k), <span class="string">'measured'</span>);
+    x_demod=demoduladorDQPSK(y_noise);
+    diferencia=abs(x_demod-x);
+    <span class="comment">% BER real</span>
+    BER_real_DQPSK(k)= sum(diferencia)/N;
+   <span class="keyword">end</span>
+   semilogy(EbNo_dB, BER_real_DQPSK)
+   hold <span class="string">on</span>;
+<span class="keyword">end</span>
+
+        title(<span class="string">'Comparaci&oacute;n BERs con rotaci&oacute;n de fase'</span>)
+        xlabel(<span class="string">'EbNo(db)'</span>)
+        ylabel(<span class="string">'BER'</span>)
+        legend(<span class="string">'BER DQPSK teorica'</span>, <span class="string">'BER DQPSK real rotada 10&ordm;'</span>, <span class="string">'BER DQPSK real rotada 20&ordm;'</span>, <span class="string">'BER DQPSK real rotada 30&ordm;'</span>)
+        grid <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="script_14.png" alt=""> <p>Como se puede observar, la rotaci&oacute;n de fase en DQPSK no afecta pr&aacute;cticamente a la BER, debido a su car&aacute;cter diferencial ya explicado. Se compienza a apreciar una ligera diferencia en torno a BER=$10^{-3}$: 0&ordm; -&gt; 9db 10&ordm; -&gt; 8db 20&ordm; -&gt; 8db 30&ordm; -&gt; 9db Estos valores son muy parecidos y el a&ntilde;o de que se necesite menos SNR para 10&ordm; y 20&ordm; que para el resto puede deberse al car&aacute;cter aleatorio del ruido.</p><pre class="codeinput"><span class="comment">% Comparacion entre BERs QPSK Y DQPSK con 30&ordm;.</span>
+figure
+semilogy(EbNo_dB,BER_teor_QPSK, <span class="string">'--b'</span>)
+grid <span class="string">on</span>
+hold <span class="string">on</span>;
+semilogy(EbNo_dB, BER_real_QPSK, <span class="string">'-ob'</span>)
+title(<span class="string">'Comparaci&oacute;n BERs con rotaci&oacute;n de fase 30&ordm;'</span>)
+xlabel(<span class="string">'EbNo(db)'</span>)
+ylabel(<span class="string">'BER'</span>)
+hold <span class="string">on</span>;
+semilogy(EbNo_dB,BER_teor_DQPSK, <span class="string">'--r'</span>)
+hold <span class="string">on</span>;
+semilogy(EbNo_dB, BER_real_DQPSK, <span class="string">'-or'</span>)
+legend(<span class="string">'BER QPSK teorica'</span>, <span class="string">'BER QPSK real'</span>, <span class="string">'BER DQPSK teorica'</span>, <span class="string">'BER DQPSK real'</span>)
+</pre><img vspace="5" hspace="5" src="script_15.png" alt=""> <p>En esta gr&aacute;fica se comparan las BERs te&oacute;rica y real de QPSK y DQPSK con una rotaci&oacute;n de 30&ordm;. Se corrobora la sensibilidad que tiene la BER ante desplazamiento de fase en el caso de QPSK en comparaci&oacute;n a DQPSK. Por lo tanto, se puede afirmar que en caso de sumar a la se&ntilde;al s&iacute;mplemente un ruido blanco gaussiano, es preferible usar QPSK ya que para la misma SNR, la BER es mayor. Sin embargo, en caso de que exista tambi&eacute;n rotaci&oacute;n de fase, ya sea porque el canal introduce distorsi&oacute;n o porque existe un desfase en muestreador del receptor, es preferible utilizar DQPSK.</p><h2 id="18">3. MODULACION DIGITAL EN n-QAM y APSK</h2><h2 id="19">Ejercio 3.1: Curvas de BER frente a EbNo para QAM y APSK</h2><p>En este apartado se modula en amplitud con QAM y APSK, a partir de unas funciones dadas.</p><pre class="codeinput"><span class="comment">%n-QAM</span>
+<span class="comment">% niveles</span>
+n=[4,16,64,256];
+
+figure
+
+<span class="comment">%bucle para cada nivel, calcular las BERs teorica y real</span>
+colors = [<span class="string">"r"</span>; <span class="string">"--r"</span>; <span class="string">"b"</span>; <span class="string">"b--"</span>; <span class="string">"g"</span>; <span class="string">"g--"</span>; <span class="string">"y"</span>; <span class="string">"y--"</span>]
+p = 0
+<span class="keyword">for</span> k=n
+    p = p+1;
+   [BERQAM, BER_teorQAM] = BER_m_ary_QAM(k, EbNo_dB);
+    semilogy(EbNo_dB, BER_teorQAM, colors(p))
+   hold <span class="string">on</span>;
+    grid <span class="string">on</span>
+    p = p+1;
+   semilogy(EbNo_dB, BERQAM, colors(p))
+   hold <span class="string">on</span>;
+<span class="keyword">end</span>
+
+   title([<span class="string">'Comparaci&oacute;n BERs -QAM'</span>])
+   legend(<span class="string">'BER QAM teorica 4-QAM'</span>, <span class="string">'BER QAM real 4-QAM'</span>, <span class="string">'BER QAM teorica 16-QAM'</span>, <span class="string">'BER QAM real 16-QAM'</span>, <span class="string">'BER QAM teorica 64-QAM'</span>, <span class="string">'BER QAM real 64-QAM'</span>, <span class="string">'BER QAM teorica 256-QAM'</span>, <span class="string">'BER QAM real 256-QAM'</span>)
+   xlabel(<span class="string">'EbNo(db)'</span>)
+   ylabel(<span class="string">'BER'</span>)
+</pre><pre class="codeoutput">colors = 
+  8&times;1 string array
+    "r"
+    "--r"
+    "b"
+    "b--"
+    "g"
+    "g--"
+    "y"
+    "y--"
+p =
+     0
+</pre><img vspace="5" hspace="5" src="script_16.png" alt=""> <p>En primer lugar, a mayor N(n&uacute;mero de niveles), mayor es el n&uacute;mero de puntos de la constelaci&oacute;n, por lo que m&aacute;s pr&oacute;ximos est&aacute;n unos de otros. Si a la se&ntilde;al de entrada se a&ntilde;ade ruido, en una constelaci&oacute;n con un n&uacute;mero de niveles grande (256) se dificulta el c&aacute;lculo de la distancia m&iacute;nima entre puntos, y por tanto puede dar lugar a una detecci&oacute;n err&oacute;nea. En relaci&oacute;n a esto, el valor de la BER te&oacute;rica y la real se alcanza a distintos niveles de EbNo: 4QAM -&gt; <a href="=-5db">16QAM -</a> -1db. 64QAM -&gt; 4db. 256QAM -&gt; 11db. Se corrobora que la diferencia entre la BER teorica y la BER real con N=256 es muy notable. Utilizar esta N supone alta probabilidad de error. Por  otro lado, cuantitativamente, respecto a una BER fija de <img src="script_eq00957679905736456308.png" alt="$10^{-3}$" style="width:47px;height:23px;"> se necesitan los siguientes valores de EbNo: 4QAM -&gt; 6db. 16QAM -&gt; 10db. 64QAM -&gt; 14db. 256QAM -&gt; 19db. Cuanto mayor es N, mayor EbNo (y SNR) se necesita para llegar a una BER determinada.</p><pre class="codeinput"><span class="comment">%APSK</span>
+
+<span class="comment">%APSK16</span>
+M16=[4,12];
+R16=[1,2.5];
+<span class="comment">% BER simulada</span>
+BER_APSK16 = BER_APSK(M16, R16, EbNo_dB);
+
+<span class="comment">%APSK32</span>
+M32=[4,12,16];
+R32=[1,2.5,4.3];
+<span class="comment">% BER simulada</span>
+BER_APSK32 = BER_APSK(M32, R32, EbNo_dB);
+
+  <span class="comment">% Representacion comparacion BERS APSK</span>
+  figure
+    semilogy(EbNo_dB, BER_APSK16)
+   hold <span class="string">on</span>;
+   grid <span class="string">on</span>
+   title([<span class="string">'Comparaci&oacute;n BERs APSK'</span>])
+    xlabel(<span class="string">'EbNo(db)'</span>)
+    ylabel(<span class="string">'BER'</span>)
+   semilogy(EbNo_dB, BER_APSK32)
+   hold <span class="string">on</span>;
+   legend(<span class="string">'BER APSK-16'</span>, <span class="string">'BER APSK-32'</span>)
+</pre><img vspace="5" hspace="5" src="script_17.png" alt=""> <p>Se puede observar que la pendiente de la BER con N=32 es m&aacute;s suave que con N=16, por lo que de nuevo, cuanto mayor es N, mayor EbNo (y SNR) se necesita para llegar a una BER determinada. Cuantitativamente, respecto a una BER fija de <img src="script_eq00957679905736456308.png" alt="$10^{-3}$" style="width:47px;height:23px;"> se necesitan los siguientes valores de EbNo: 16APSK -&gt; 11db. 32APSK -&gt; 13db. Por tanto, la diferencia es 2db.</p><p>En conclusi&oacute;n, cuanto mayor es el n&uacute;mero de s&iacute;mbolos, mayor es la BER para la misma SNR. Sin embargo, la velocidad de transmisi&oacute;n tambi&eacute;n aumenta, por lo que puede compensar tener una mayor BER si tener alg&uacute;n error de transmisi&oacute;n no impide la comunicaci&oacute;n (por ejemplo en el caso de comunicaciones en directo es preferible que haya errores a que haya retardo) o si se cuenta con un corrector de errores en recepci&oacute;n.</p><h2 id="23">EXTRA: Comparacion 16APSK Y 16QAM.</h2><p>Ambas son modulaciones en amplitud y en fase. La diferencia es que la constelaci&oacute;n tiene una geometr&iacute;a distinta. Comparando la SNR que se necesita para obtener una BER fija de <img src="script_eq00957679905736456308.png" alt="$10^{-3}$" style="width:47px;height:23px;">, se concluye que 16-QAM es ligeramente menos sensible al ruido. Esto se debe a que para la misma SNR, los s&iacute;mbolos en QAM est&aacute;n m&aacute;s separados. Por ejemplo, para el caso de 16-QAM, la distancia entre s&iacute;mbolos es de aproximadamente 2 unidades mientas que para 16-APSK es de tan solo 1.3 unidades. Para PSK normal, esta distancia es incluso menor, siendo de tan solo 0.98 unidades. La ventaja que tiene PSK sobre QAM es que al no modularse en amplitud, los requisitos de linearidad de los amplificades necesarios para llevarlo a cabo son menores, por lo que se puede utilizar de clase C, los cuales son m&aacute;s eficientes. Por lo tanto, APSK puede ser un buen compromiso para cuando se necesite eficiencia pero se necesite reducir la BER.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Practica 3 - Modulaciones digitales
+% Maria José Medina y Teresa González
+
+%% 2. MODULACIÓN DIGITAL POR DESPLAZAMIENTO DE FASE
+%% Ejercicio 2.1: Modulacion QPSK
+%
+% En este apartado se modula una señal de entrada sin ruido en QPSK. Para
+% ello, se utiliza la función dada moduladorQPSK (4 niveles). En esta función se cogen
+% los elementos de un vector par de 2 en 2 y se calculan los componentes
+% fase (I) y cuadratura (Q) tomando el primer y segundo elemento de cada par respectivamente.
+
+% Vector de entrada con longitud par (8).
+x = [ 1 1 1 0 0 1 0 0];
+
+% Salida modulador 
+y_qpsk = moduladorQPSK(x);
+
+% Representacion puntos constelación
+scatterplot(y_qpsk);
+title('Constelación QPSK')
+%%
+%
+% Como se puede observar en la representación, ya que no hay presencia de
+% ruido, los puntos de la salida coinciden exactamente con los de la
+% constelación QPSK.
+%
+%% EXTRA: REPRESENTACIÓN DQPSK
+% 
+% DQPSK consiste en modular cada elemento de forma relativa con respecto al anterior (tiene memoria). 
+% La fase se calcula haciendo como la suma de la fase del símbolo anterior más la fase del símbolo actual. 
+% A continuación, se representa la constelación DQPSK para compararla con la de QPSK a partir de una señal de entrada aleatoria binaria.
+N=10000;
+x=randi([0,1],1,N);
+y_dqpsk=moduladorDQPSK(x);
+scatterplot(y_dqpsk)
+title('Constelación DQPSK')
+%%
+% 
+% Como se puede observar, en vez de 4 puntos hay 8, ya que
+% calcula la suma de un punto con el resto para todas las
+% combinaciones de coordenadas existentes en QPSK. 
+
+%% Ejercicio 2.2: Modulacion QPSK con ruido
+% 
+% En este apartado se genera una señal binaria aleatoria de longitud
+% N=10000. A esta se le añade ruido awgn, con distintas SNRs (5,10,15 db).
+% Se modula en QPSK como el apartado anterior.
+
+N=10000;
+snr_db = [5, 10, 15];
+
+% señal
+x=randi([0,1],1,N);
+
+% salida modulacion
+y_qpsk=moduladorQPSK(x);
+
+% Bucle SNRs para generar señal awgn y representarla en scatterplot.
+for k=snr_db
+y_noise=awgn(y_qpsk, k, 'measured');
+scatterplot(y_noise);
+title(['Constelacion QPSK con SNRdb=' num2str(k)])
+end
+
+%%
+% Como se puede observar en los distintos scatterplot, a mayor SNR más concentrados están los puntos resultantes, por lo que la BER resultante será menor. Al contrario, con SNR inferiores, los puntos están más dispersos, lo que supone un mayor error de detección.
+% Idealmente, la distancia entre puntos es de 2 unidades y el umbral de
+% decisión se encuentra en cero tanto para fase como para cuadratura.
+% En este caso, con el SNR mayor (15 db)la nube de puntos formada en torno a los valores sin ruido tiene un radio de 0.5 aproximadamente.
+% Al ser este radio menor que la distancia al umbral de decisión (1
+% unidad), el error no es significativo.
+% Con SNR=10 db, el radio de la nube de puntos es 1 aproximadamente, por lo
+% que se encuentra muy próximo al umbral de decisión, causando mayor
+% confusión.
+% Por último, con la SNR menor (5db), el radio es 1.3 aproximadamente, un 30% mayor que la distancia
+% al umbral de decisión. Por ello las
+% nubes de puntos se solapan y al calcular la distancia mínima no se garantiza una detección correcta.
+
+%% Ejercicio 2.3: Cadena de modulación-demodulación QPSK-DQPSK
+%
+% En este apartado se modula y se demodula la señal aleatoria del apartado
+% anterior, tanto en QPSK como en DQPSK.
+
+% QPSK
+x_demod=demoduladorQPSK(y_qpsk);
+dif_qpsk=max(abs(x_demod-x));
+disp("BER QPSK ="+dif_qpsk)
+
+% DQPSK
+y_dqpsk=moduladorDQPSK(x);
+x_demod=demoduladorDQPSK(y_dqpsk);
+dif_dqpsk=max(abs(x_demod-x));
+disp("BER DQPSK ="+dif_dqpsk)
+
+%%
+%
+% Como se puede observar, en ausencia de ruido, la señal de entrada y
+% salida de la cadena son idénticas, por lo que BER=0 (la diferencia entre ambas bit a bit es 0) en ambos tipos de
+% modulación. 
+
+%% Ejercicio 2.4: Curvas de BER frente a EbNo para QPSK y DQPSK
+%
+% En este apartado se realiza una comparativa de las BERs teóricas y reales
+% (en presencia de ruido awgn) frente a valores de EbNo tanto para QPSK como DQPSK. 
+% Para ello se utiliza un vector EbNo de -5 a 20dB.
+
+EbNo_dB = -5:2:20; 
+EbNo = 10.^(EbNo_dB/10);
+k = log2(4); %Numero de bits por simbolo
+SNR_dB = EbNo_dB + 10*log10(k); 
+
+% QPSK
+% Fórmulas qpsk teorica
+BER_teor_QPSK = qfunc(sqrt(2*EbNo));
+BER_teor_QPSK(BER_teor_QPSK<1e-5)=NaN;
+
+% salida modulacion
+y_qpsk=moduladorQPSK(x);
+
+% bucle para calcular la BER real para cada valor de EbNo (db). 
+for k=1:length(EbNo_dB)
+    % señal con ruido awgn.
+    y_noise=awgn(y_qpsk, SNR_dB(k), 'measured');
+    % señal demodulada
+    x_demod=demoduladorQPSK(y_noise);
+    % diferencia entre señal demodulada con ruido y la de entrada. El total
+    % de diferencias es el error.
+    diferencia=abs(x_demod-x);
+    % BER= total error/longitud.
+    BER_real_QPSK(k)= sum(diferencia)/N;
+end
+
+
+% DQPSK
+% Fórmulas BER teórica.
+BER_teor_DQPSK=1.13*qfunc(sqrt(1.2*EbNo));
+BER_teor_DQPSK(BER_teor_DQPSK<1e-5)=NaN;
+
+%señal modulada 
+y_dqpsk=moduladorDQPSK(x);
+
+
+for k=1:length(EbNo_dB)
+    y_noise=awgn(y_dqpsk, SNR_dB(k), 'measured');
+    x_demod=demoduladorDQPSK(y_noise);
+    diferencia=abs(x_demod-x);
+    BER_real_DQPSK(k)= sum(diferencia)/N;
+end
+
+figure
+semilogy(EbNo_dB,BER_teor_QPSK, '-ob')
+hold on;
+semilogy(EbNo_dB, BER_real_QPSK, 'REPLACE_WITH_DASH_DASHr')
+title('Comparación BERs')
+xlabel('EbNo(db)')
+ylabel('BER')
+hold on;
+semilogy(EbNo_dB,BER_teor_DQPSK, '-og')
+hold on;
+semilogy(EbNo_dB, BER_real_DQPSK, 'REPLACE_WITH_DASH_DASHm')
+legend('BER QPSK teorica', 'BER QPSK real', 'BER dQPSK teorica', 'BER DQPSK real')
+grid on
+
+%%
+%
+% Como se puede extraer de la comparativa, tanto las BERs teórica como la
+% real se ajustan con mucha precisión en ambos tipos de modulación. 
+% Por otro lado, cuanto mayor es el EbNo, mayor es SNR, por lo que la BER
+% cae a valores despreciables (menor que $10^{-5}$). Por ejemplo, para un
+% BER=$10^{-5}$, en el caso de QPSK se necesitan 9db de EnBo, mientras que en
+% DQPSK se necesitan 11db, una diferencia de 2db.
+% Esto significa que en DQPSK tanto la BER teórica como la real son mayores
+% que en QPSK. El motivo es que, al tratarse de un sistema con memoria,
+% el error se acumula de un símbolo al siguiente, y se puede ver tanto en la gráfica como de forma analítica
+% el efecto que tiene sobre todo para SNRs relativamente altas, donde la diferencia respecto a QPSK
+% es mayor. 
+
+%% Ejercicio 2.5: Influencia de la rotación de la fase o error de fase en recepción
+%
+% En este apartado además de ruido awgn se añade a la señal modulada una
+% rotacion fase entre 10 y 30º tanto para QPSK como DQPSK.
+
+% QPSK
+% bucle para añadir rotacion con exponente complejo.
+for n=10:10:30
+ scatterplot(y_qpsk*exp(n*1i*pi/180));
+ title(['Señal con rotacion de fase = ' num2str(n) 'º'])
+ grid on
+end
+
+% Como se puede observar, debido a la rotación de fase la distancia al
+% umbral de decisión queda significativamente reducida. En el caso de
+% rotación de 10º, la distancia mínima para de 1 a 0.8 aproximadamente.
+% Para 20º, 0.6 y para 10º, 0.4. Esto causa que se necesite un apotencia de
+% ruido mucho menor generar el símbolo erróneo, por lo que la BER aumenta
+% considerablemente.
+
+%%
+% Se representa la señal modulada en QPSK rotada 10-20-30º.
+
+% figura BER teórica QPSK
+figure
+semilogy(EbNo_dB,BER_teor_QPSK, 'b')
+ hold on;
+ 
+% bucle para añadir ruido y rotación de fase a la señal modulada.
+for n=10:10:30 
+    for k=1:length(EbNo_dB)
+    y_noise=awgn(y_qpsk*exp(n*1i*pi/180), SNR_dB(k), 'measured');
+    x_demod=demoduladorQPSK(y_noise);
+    % demodulacion.
+    diferencia=abs(x_demod-x);
+    % calculo BER real.
+    BER_real_QPSK(k)= sum(diferencia)/N;
+    end
+        % representacion BER real
+        semilogy(EbNo_dB, BER_real_QPSK)
+        hold on;
+    
+end
+        title('Comparación BERs con rotación de fase')
+        xlabel('EbNo(db)')
+        ylabel('BER')      
+        legend('BER QPSK teorica', 'BER QPSK real rotada 10º', 'BER QPSK real rotada 20º', 'BER QPSK real rotada 30º')
+        grid on;
+        
+%%
+%
+% Como se puede observar, a mayor rotación de fase, mayor es la diferencia
+% entre la BER teórica y la real. A mayor ángulo, más suave es la pendiente de la BER respecto a EbNo. El motivo es que al introducir diferencia
+% de fase, se rota los puntos de la constelación pero no los límites de
+% decisión (ejes), por lo que en presencia de ruido es más probable que los
+% puntos caigan en cuadrantes erróneos.
+% Cuantitativamente, para conseguir una BER de $10^{-3}$, se necesitan las siguientes EbNo:
+% 0º -> 7db
+% 10º -> 8db
+% 20º -> 11db
+% 30º -> 15db
+% Es decir, a mayor rotación de fase, mayor es la SNR necesaria para
+% conseguir el mismo nivel de BER.
+        
+% DQPSK
+
+for n=10:10:30
+ scatterplot(y_qpsk*exp(n*1i*pi/180));
+ title('Señal con rotacion de fase'); 
+end
+%%
+% Se representan las señales rotadas.
+
+% BER teorica
+figure
+semilogy(EbNo_dB,BER_teor_DQPSK, 'g')
+hold on;
+
+% bucle calcular ruido + rotacion de fase
+for n=10:10:30 
+   for k=1:length(EbNo_dB)
+    y_noise=awgn(y_dqpsk*exp(n*1i*pi/180), SNR_dB(k), 'measured');
+    x_demod=demoduladorDQPSK(y_noise);
+    diferencia=abs(x_demod-x);
+    % BER real
+    BER_real_DQPSK(k)= sum(diferencia)/N;
+   end 
+   semilogy(EbNo_dB, BER_real_DQPSK)
+   hold on;
+end
+
+        title('Comparación BERs con rotación de fase')
+        xlabel('EbNo(db)')
+        ylabel('BER')      
+        legend('BER DQPSK teorica', 'BER DQPSK real rotada 10º', 'BER DQPSK real rotada 20º', 'BER DQPSK real rotada 30º')
+        grid on;
+        
+%% 
+% Como se puede observar, la rotación de fase en DQPSK no afecta
+% prácticamente a la BER, debido a su carácter diferencial ya explicado. Se
+% compienza a apreciar una ligera diferencia en torno a BER=$10^{-3}$:
+% 0º -> 9db
+% 10º -> 8db
+% 20º -> 8db
+% 30º -> 9db
+% Estos valores son muy parecidos y el año de que se necesite menos SNR
+% para 10º y 20º que para el resto puede deberse al carácter aleatorio del ruido.
+
+% Comparacion entre BERs QPSK Y DQPSK con 30º.
+figure
+semilogy(EbNo_dB,BER_teor_QPSK, 'REPLACE_WITH_DASH_DASHb')
+grid on
+hold on;
+semilogy(EbNo_dB, BER_real_QPSK, '-ob')
+title('Comparación BERs con rotación de fase 30º')
+xlabel('EbNo(db)')
+ylabel('BER')
+hold on;
+semilogy(EbNo_dB,BER_teor_DQPSK, 'REPLACE_WITH_DASH_DASHr')
+hold on;
+semilogy(EbNo_dB, BER_real_DQPSK, '-or')
+legend('BER QPSK teorica', 'BER QPSK real', 'BER DQPSK teorica', 'BER DQPSK real')
+%%
+%
+% En esta gráfica se comparan las BERs teórica y real de QPSK y DQPSK con
+% una rotación de 30º. Se corrobora la sensibilidad que tiene la BER ante
+% desplazamiento de fase en el caso de QPSK en comparación a DQPSK. Por lo
+% tanto, se puede afirmar que en caso de sumar a la señal símplemente un
+% ruido blanco gaussiano, es preferible usar QPSK ya que para la misma SNR,
+% la BER es mayor. Sin embargo, en caso de que exista también rotación de
+% fase, ya sea porque el canal introduce distorsión o porque existe un
+% desfase en muestreador del receptor, es preferible utilizar DQPSK.
+
+%% 3. MODULACION DIGITAL EN n-QAM y APSK
+%% Ejercio 3.1: Curvas de BER frente a EbNo para QAM y APSK
+% 
+% En este apartado se modula en amplitud con QAM y APSK, a partir de unas
+% funciones dadas.
+
+%n-QAM
+% niveles
+n=[4,16,64,256];
+
+figure
+
+%bucle para cada nivel, calcular las BERs teorica y real
+colors = ["r"; "REPLACE_WITH_DASH_DASHr"; "b"; "bREPLACE_WITH_DASH_DASH"; "g"; "gREPLACE_WITH_DASH_DASH"; "y"; "yREPLACE_WITH_DASH_DASH"]
+p = 0
+for k=n
+    p = p+1;
+   [BERQAM, BER_teorQAM] = BER_m_ary_QAM(k, EbNo_dB);
+    semilogy(EbNo_dB, BER_teorQAM, colors(p))
+   hold on;
+    grid on
+    p = p+1;
+   semilogy(EbNo_dB, BERQAM, colors(p))
+   hold on;
+end
+
+   title(['Comparación BERs -QAM'])
+   legend('BER QAM teorica 4-QAM', 'BER QAM real 4-QAM', 'BER QAM teorica 16-QAM', 'BER QAM real 16-QAM', 'BER QAM teorica 64-QAM', 'BER QAM real 64-QAM', 'BER QAM teorica 256-QAM', 'BER QAM real 256-QAM')
+   xlabel('EbNo(db)')
+   ylabel('BER')
+
+%%
+%
+% En primer lugar, a mayor N(número de niveles), mayor es el número de puntos de la constelación, por lo que más próximos están unos de otros. Si a la señal de entrada se añade ruido, en una constelación con un número de niveles grande (256) se dificulta el cálculo de la distancia mínima entre puntos, y por tanto puede dar lugar a una detección errónea.     
+% En relación a esto, el valor de la BER teórica y la real se alcanza a distintos niveles de EbNo:
+% 4QAM -> <=-5db
+% 16QAM -> -1db.
+% 64QAM -> 4db.
+% 256QAM -> 11db.
+% Se corrobora que la diferencia entre la BER teorica y la BER real con
+% N=256 es muy notable. Utilizar esta N supone alta probabilidad de error.
+% Por  otro lado, cuantitativamente, respecto a una BER fija de $10^{-3}$ se necesitan los
+% siguientes valores de EbNo:
+% 4QAM -> 6db.
+% 16QAM -> 10db.
+% 64QAM -> 14db.
+% 256QAM -> 19db.
+% Cuanto mayor es N, mayor EbNo (y SNR) se necesita para llegar a una BER
+% determinada.
+
+%APSK
+
+%APSK16
+M16=[4,12];
+R16=[1,2.5];
+% BER simulada
+BER_APSK16 = BER_APSK(M16, R16, EbNo_dB);
+
+%APSK32
+M32=[4,12,16];
+R32=[1,2.5,4.3];
+% BER simulada
+BER_APSK32 = BER_APSK(M32, R32, EbNo_dB);
+
+  % Representacion comparacion BERS APSK
+  figure
+    semilogy(EbNo_dB, BER_APSK16)
+   hold on;
+   grid on
+   title(['Comparación BERs APSK'])
+    xlabel('EbNo(db)')
+    ylabel('BER')
+   semilogy(EbNo_dB, BER_APSK32)
+   hold on;
+   legend('BER APSK-16', 'BER APSK-32')
+%%
+%
+% Se puede observar que la pendiente de la BER con N=32 es más suave que
+% con
+% N=16, por lo que de nuevo, cuanto mayor es N, mayor EbNo (y SNR) se necesita para llegar a una BER
+% determinada.
+% Cuantitativamente, respecto a una BER fija de $10^{-3}$ se necesitan los
+% siguientes valores de EbNo:
+% 16APSK -> 11db.
+% 32APSK -> 13db.
+% Por tanto, la diferencia es 2db.
+
+%% 
+% En conclusión, cuanto mayor es el número de símbolos, mayor es la BER
+% para la misma SNR. Sin embargo, la velocidad de transmisión también
+% aumenta, por lo que puede compensar tener una mayor BER si tener algún
+% error de transmisión no impide la comunicación (por ejemplo en el caso de comunicaciones en directo
+% es preferible que haya errores a que haya retardo) o si se cuenta con un
+% corrector de errores en recepción.
+
+%% EXTRA: Comparacion 16APSK Y 16QAM.
+% Ambas son modulaciones en amplitud y en fase. La diferencia es que la
+% constelación tiene una geometría distinta. Comparando la SNR que se
+% necesita para obtener una BER fija de $10^{-3}$, se concluye que 16-QAM
+% es ligeramente menos sensible al ruido. Esto se debe a que para la misma
+% SNR, los símbolos en QAM están más separados. Por ejemplo, para el
+% caso de 16-QAM, la distancia entre símbolos es de aproximadamente 2
+% unidades mientas que para 16-APSK es de tan solo 1.3 unidades. Para PSK
+% normal, esta distancia es incluso menor, siendo de tan solo 0.98
+% unidades. La ventaja que tiene PSK sobre QAM es que al no modularse en
+% amplitud, los requisitos de linearidad de los amplificades necesarios
+% para llevarlo a cabo son menores, por lo que se puede utilizar de clase
+% C, los cuales son más eficientes. Por lo tanto, APSK puede ser un buen
+% compromiso para cuando se necesite eficiencia pero se necesite reducir la
+% BER.
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
